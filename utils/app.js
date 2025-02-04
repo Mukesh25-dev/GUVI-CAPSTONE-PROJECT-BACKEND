@@ -15,7 +15,7 @@ app.use(CookieParser());
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: "https://effulgent-taffy-04bc9b.netlify.app/",
     credentials: true,
   })
 );
