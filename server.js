@@ -9,9 +9,9 @@ mongoose
   .then(() => {
     console.log("database connected successfully..");
 
-    app.listen(PORT, () => {
+    app.listen(() => {
       console.log(
-        "The server is running on https://guvi-capstone-project-backend.onrender.com"
+        `The server is running on https://localhost:${PORT}`
       );
     });
   })
