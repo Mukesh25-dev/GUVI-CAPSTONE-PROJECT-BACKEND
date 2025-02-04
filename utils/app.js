@@ -10,12 +10,12 @@ const paymentRoutes = require("../routes/paymentRoutes");
 const passRouter = require("../routes/passRouter");
 const app = express();
 
-app.use(express.json());+-
-app.use(CookieParser());
+app.use(express.json());
++-app.use(CookieParser());
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "https://effulgent-taffy-04bc9b.netlify.app/",
+    origin: "https://event-mangement-mukesh.netlify.app",
     credentials: true,
   })
 );
