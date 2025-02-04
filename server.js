@@ -9,10 +9,8 @@ mongoose
   .then(() => {
     console.log("database connected successfully..");
 
-    app.listen(() => {
-      console.log(
-        `The server is running on https://localhost:${PORT}`
-      );
+    app.listen(PORT, () => {
+      console.log(`The server is running on http://localhost:${PORT}`);
     });
   })
   .catch((error) => {
