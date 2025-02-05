@@ -76,7 +76,6 @@ const authController = {
       sameSite: "none",
       secure: true,
       path: "/",
-      domain: "http://localhost:5173",
     });
 
     response.status(200).json({ message: "user logged in successfully" });
