@@ -11,7 +11,7 @@ const passRouter = require("../routes/passRouter");
 const app = express();
 
 app.use(express.json());
-+-app.use(CookieParser());
+app.use(CookieParser());
 app.use(morgan("dev"));
 app.use(
   cors({
