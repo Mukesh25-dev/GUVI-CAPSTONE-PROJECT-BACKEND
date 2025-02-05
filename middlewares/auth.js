@@ -1,6 +1,6 @@
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../utils/config");
+const jwt = require("jsonwebtoken");
 
 const auth = {
   verifyLogin: async (request, response, next) => {
