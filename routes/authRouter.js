@@ -6,8 +6,6 @@ const authRouter = express.Router();
 
 authRouter.post("/register", authController.register);
 
-authRouter.post("/complete-registration", authController.completeRegistration);
-
 authRouter.post("/login", authController.login);
 
 authRouter.post("/logout", authController.logout);
