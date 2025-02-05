@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../utils/config");
+const { JWT_SECRET, SECRET_KEY } = require("../utils/config");
 
 const authController = {
   register: async (req, res) => {
@@ -82,7 +82,7 @@ const authController = {
       }
 
       // create a token
-      const token = jwt.sign({ id: user._id }, JWT_SECRET);
+      const token = jwt.sign({ id: user._id }, SECRET_KEY);
 
       // set the token in the cookie
       // res.cookie('token', token, {
@@ -113,7 +113,7 @@ const authController = {
   logout: async (req, res) => {
     try {
       // clear the token from the cookie
-      // res.clearCookie('token');
+      res.clearCookie('token');
 
       res.header(
         "Set-Cookie",
