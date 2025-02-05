@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { SECRET_KEY } = require("../utils/config");
+const { JWT_SECRET } = require("../utils/config");
 const jwt = require("jsonwebtoken");
 
 const auth = {
@@ -11,7 +11,7 @@ const auth = {
     }
 
     //verify the token
-    jwt.verify(token, SECRET_KEY, (error, user) => {
+    jwt.verify(token, JWT_SECRET, (error, user) => {
       if (error) {
         return response.status(400).json({ message: "unAuthorized" });
       }
