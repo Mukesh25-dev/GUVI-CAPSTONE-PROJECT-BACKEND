@@ -15,7 +15,7 @@ app.use(CookieParser());
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "https://fluffy-cajeta-78a763.netlify.app",
+    origin: "https://sprightly-boba-740369.netlify.app",
     credentials: true,
   })
 );
