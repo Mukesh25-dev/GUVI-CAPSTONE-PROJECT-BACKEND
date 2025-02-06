@@ -25,6 +25,30 @@ const authController = {
       response.status(500).json({ message: error.message });
     }
   },
+  completeRegistration: async (request, response) => {
+    try {
+      const { email } = request.body;
+      if (!email) {
+        return response.status(400).json({ message: "Email is required" });
+      }
+      const user = await User.findOne({ email });
+      if (!user) {
+        return response.status(404).json({ message: "User not found" });
+      }
+      if (user.registration_complete) {
+        return response.status(400).json({
+          message: "Registration is already complete. You can log in.",
+        });
+      }
+      user.registration_complete = true;
+      await user.save();
+      return response.status(200).json({
+        message: "Registration completed successfully. You can now log in.",
+      });
+    } catch (error) {
+      return response.status(500).json({ message: error.message });
+    }
+  },
   login: async (request, response) => {
     const { email, password } = request.body;
 
@@ -42,11 +66,11 @@ const authController = {
 
     const token = jwt.sign({ id: user._id }, SECRET_KEY);
 
-    response.cookie("token", token, { httpOnly: true,
-        secure: true, // Set to true if using HTTPS
-        sameSite: "none", // Set to 'none' for cross-site cookies
-        maxAge: 3600000, // Cookie expiration time in milliseconds
-        path: "/", // Set the path for which the cookie is valid
+    response.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // Set to true if using HTTPS
+      sameSite: "none", // Set to 'none' for cross-site cookies
+      path: "/", // Set the path for which the cookie is valid
     });
 
     response.status(200).json({ message: "user logged in successfully" });
