@@ -75,6 +75,7 @@ const authController = {
         message: "User logged in successfully",
         token, // Frontend will store this token in localStorage
       });
+      console.log(token);
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
