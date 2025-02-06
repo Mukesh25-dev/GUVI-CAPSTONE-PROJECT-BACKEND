@@ -50,35 +50,36 @@ const authController = {
     }
   },
   login: async (request, response) => {
-    const { email, password } = request.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return response.json({ message: "user not found" });
-    }
-
-    const isPassword = await bcrypt.compare(password, user.password);
-
-    if (!isPassword) {
-      return response.status(400).json({ message: "invalid credentials" });
-    }
-
-    const token = jwt.sign({ id: user._id }, SECRET_KEY);
-
-    response.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      path: "/",
-    });
-
-    response.status(200).json({ message: "user logged in successfully", token });
     try {
+      const { email, password } = request.body;
+
+      // Find user by email
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return response.status(404).json({ message: "User not found" });
+      }
+
+      // Compare password
+      const isPassword = await bcrypt.compare(password, user.password);
+
+      if (!isPassword) {
+        return response.status(400).json({ message: "Invalid credentials" });
+      }
+
+      // Generate JWT token
+      const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "1h" });
+
+      // Send token and success message back to the client
+      response.status(200).json({
+        message: "User logged in successfully",
+        token, // Frontend will store this token in localStorage
+      });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
   },
+
   logout: async (request, response) => {
     try {
       response.clearCookie("token");
