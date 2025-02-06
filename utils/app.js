@@ -15,7 +15,7 @@ app.use(CookieParser());
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "https://sprightly-boba-740369.netlify.app",
+    origin: "https://papaya-gumdrop-7407df.netlify.app",
     credentials: true,
   })
 );
