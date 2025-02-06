@@ -73,7 +73,7 @@ const authController = {
       path: "/",
     });
 
-    response.status(200).json({ message: "user logged in successfully" });
+    response.status(200).json({ message: "user logged in successfully", token });
     try {
     } catch (error) {
       response.status(500).json({ message: error.message });

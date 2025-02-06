@@ -3,23 +3,21 @@ const { SECRET_KEY } = require("../utils/config");
 const jwt = require("jsonwebtoken");
 
 const auth = {
-  verifyLogin: async (request, response, next) => {
-    const token = request.cookies.token;
+  verifyLogin: async (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
-      return response.status(400).json({ message: "unAuthorized" });
+    if (!authHeader) {
+      return res.status(401).json({ message: "Token not provided" });
     }
 
-    //verify the token
-    jwt.verify(token, SECRET_KEY, (error, user) => {
-      if (error) {
-        return response.status(400).json({ message: "unAuthorized" });
+    const token = authHeader.split(" ")[1]; // Remove "Bearer"
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
       }
 
-      // set the user to request object
-      request.userId = user.id;
-
-      //pass the middleware
+      req.userId = user.id; // Attach the decoded token payload to req.user
       next();
     });
   },
