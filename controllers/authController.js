@@ -68,9 +68,9 @@ const authController = {
 
     response.cookie("token", token, {
       httpOnly: true,
-      secure: true, // Set to true if using HTTPS
-      sameSite: "none", // Set to 'none' for cross-site cookies
-      path: "/", // Set the path for which the cookie is valid
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      path: "/",
     });
 
     response.status(200).json({ message: "user logged in successfully" });
