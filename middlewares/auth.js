@@ -5,20 +5,25 @@ const jwt = require("jsonwebtoken");
 const auth = {
   verifyLogin: async (req, res, next) => {
     try {
-    const token = req.cookies.token;
+      const token = req.cookies.token;
 
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized: No token provided" });
+      if (!token) {
+        return res
+          .status(401)
+          .json({ message: "Unauthorized: No token provided" });
+      }
+
+      const decoded = jwt.verify(token, SECRET_KEY);
+      req.userId = decoded.id;
+
+      next();
+    } catch (error) {
+      console.error("Token verification error:", error);
+      res
+        .status(401)
+        .json({ message: "Unauthorized: Invalid or expired token" });
     }
-
-    const decoded = jwt.verify(token, SECRET_KEY);
-    req.userId = decoded.id;
-
-    next();
-  } catch (error) {
-    res.status(401).json({ message: "Unauthorized: Invalid token" });
-  }
-},
+  },
 
   allowRoles: (roles) => {
     return async (request, response, next) => {

@@ -14,6 +14,8 @@ const EMAIL_USER = process.env.EMAIL_USER;
 
 const EMAIL_PASS = process.env.EMAIL_PASS;
 
+const NODE_ENV = process.env.NODE_ENV;
+
 module.exports = {
   MONGODB_URI,
   PORT,
@@ -22,4 +24,5 @@ module.exports = {
   RAZORPAY_SECRET_KEY,
   EMAIL_USER,
   EMAIL_PASS,
+  NODE_ENV,
 };
