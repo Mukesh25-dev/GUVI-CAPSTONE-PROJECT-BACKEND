@@ -12,13 +12,13 @@ const app = express();
 
 app.use(express.json());
 app.use(CookieParser());
+
+const corsOptions = {
+  origin: "https://papaya-gumdrop-7407df.netlify.app",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
-app.use(
-  cors({
-    origin: "https://papaya-gumdrop-7407df.netlify.app",
-    credentials: true,
-  })
-);
 
 app.use("/api/v1/auth", authRouter);
 

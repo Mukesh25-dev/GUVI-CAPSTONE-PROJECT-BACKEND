@@ -49,35 +49,34 @@ const authController = {
       return response.status(500).json({ message: error.message });
     }
   },
-  login: async (request, response) => {
+  login: async (req, res) => {
     try {
-      const { email, password } = request.body;
+      const { email, password } = req.body;
 
-      // Find user by email
       const user = await User.findOne({ email });
 
       if (!user) {
-        return response.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
       }
 
-      // Compare password
-      const isPassword = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
-      if (!isPassword) {
-        return response.status(400).json({ message: "Invalid credentials" });
+      if (!isPasswordValid) {
+        return res.status(400).json({ message: "Invalid credentials" });
       }
 
-      // Generate JWT token
       const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "1h" });
 
-      // Send token and success message back to the client
-      response.status(200).json({
-        message: "User logged in successfully",
-        token, // Frontend will store this token in localStorage
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        path: "/",
       });
-      console.log(token);
+
+      res.status(200).json({ message: "Login successful" });
     } catch (error) {
-      response.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 
@@ -92,16 +91,17 @@ const authController = {
   },
   me: async (request, response) => {
     try {
-      // get the user id from the middleware
-      const userId = request.userId;
+      const userId = req.userId;
 
-      // find the user in the db by the id
-      const user = await User.findById(userId).select("-password -v");
+      const user = await User.findById(userId);
 
-      //show the details of the user
-      response.status(200).json(user);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ id: user._id, email: user.email });
     } catch (error) {
-      response.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 };
