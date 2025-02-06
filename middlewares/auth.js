@@ -6,20 +6,18 @@ const auth = {
   verifyLogin: async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
-      return res.status(401).json({ message: "Token not provided" });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const token = authHeader.split(" ")[1]; // Remove "Bearer"
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-      if (err) {
-        return res.status(403).json({ message: "Invalid token" });
-      }
-
-      req.userId = user.id; // Attach the decoded token payload to req.user
+    const token = authHeader.split(" ")[1];
+    try {
+      const decoded = jwt.verify(token, SECRET_KEY);
+      req.user = decoded; // Store decoded user data in `req.user`
       next();
-    });
+    } catch (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
   },
 
   allowRoles: (roles) => {
