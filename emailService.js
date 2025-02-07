@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const { EMAIL_USER, EMAIL_PASS } = require("./utils/config");
 
-const sendConfirmationEmail = async (email, eventTitle) => {
+const sendConfirmationEmail = async (email) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -15,7 +15,7 @@ const sendConfirmationEmail = async (email, eventTitle) => {
       from:EMAIL_USER,
       to: email,
       subject: "Ticket Purchase Confirmation",
-      text: `Dear User, \n\nThank you for purchasing a ticket to "${eventTitle}". We look forward to seeing you at the event!\n\nWarm Regards, Event Team`,
+      text: `Dear User, \n\nThank you for purchasing a ticket to our Event. We look forward to seeing you at the event!\n\nWarm Regards, Event Team`,
     };
 
     // Send the email
