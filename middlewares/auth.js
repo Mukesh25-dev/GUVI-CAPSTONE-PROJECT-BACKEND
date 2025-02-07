@@ -4,24 +4,20 @@ const jwt = require("jsonwebtoken");
 
 const auth = {
   verifyLogin: async (req, res, next) => {
+    const token = req.cookies.authToken; // Access cookie from request
+
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     try {
-      const token = req.cookies.token;
+      const decoded = jwt.verify(token, "your_secret_key"); // Verify JWT
 
-      if (!token) {
-        return res
-          .status(401)
-          .json({ message: "Unauthorized: No token provided" });
-      }
-
-      const decoded = jwt.verify(token, SECRET_KEY);
-      req.userId = decoded.id;
+      req.user = decoded; // Attach user data to request
 
       next();
-    } catch (error) {
-      console.error("Token verification error:", error);
-      res
-        .status(401)
-        .json({ message: "Unauthorized: Invalid or expired token" });
+    } catch (err) {
+      return res.status(401).json({ error: "Invalid token" });
     }
   },
 
