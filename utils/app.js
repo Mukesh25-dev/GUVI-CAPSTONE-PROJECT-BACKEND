@@ -15,6 +15,7 @@ app.use(CookieParser());
 
 const corsOptions = {
   origin: "https://papaya-gumdrop-7407df.netlify.app",
+  //origin: "http://localhost:5173",
   methods: "GET, POST, PUT, DELETE",
   credentials: true,
 };

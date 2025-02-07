@@ -88,7 +88,7 @@ const paymentController = {
       }
 
       // Send confirmation email after successful ticket creation
-      await sendConfirmationEmail(email, ticket);
+      await sendConfirmationEmail(email);
 
       return res.status(200).json({
         message: "Payment successful and ticket created.",
