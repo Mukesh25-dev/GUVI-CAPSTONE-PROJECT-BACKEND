@@ -89,12 +89,17 @@ const authController = {
       res.status(500).json({ message: "Server error. Please try again." });
     }
   },
-
   logout: async (request, response) => {
     try {
-      response.clearCookie("token");
+      // Clear the token with proper cookie attributes
+      response.clearCookie("token", {
+        httpOnly: true,
+        secure: true, // Ensure secure cookie in production
+        sameSite: "None", // Support cross-site cookie usage
+        path: "/", // Ensure the cookie is cleared across the entire domain
+      });
 
-      response.status(200).json({ message: "logout successfull" });
+      response.status(200).json({ message: "Logout successful" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
