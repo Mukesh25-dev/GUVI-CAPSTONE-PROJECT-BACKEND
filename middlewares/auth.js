@@ -4,16 +4,16 @@ const jwt = require("jsonwebtoken");
 
 const auth = {
   verifyLogin: async (req, res, next) => {
-    const token = req.cookies.authToken; // Access cookie from request
+    const token = req.cookies.token; // Access cookie from request
 
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
     try {
-      const decoded = jwt.verify(token, "your_secret_key"); // Verify JWT
+      const decoded = jwt.verify(token, SECRET_KEY); // Verify JWT
 
-      req.user = decoded; // Attach user data to request
+      req.userID = decoded.id; // Attach user data to request
 
       next();
     } catch (err) {
