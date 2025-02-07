@@ -7,23 +7,26 @@ const auth = {
     const token = req.cookies.token; // Access cookie from request
 
     if (!token) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: "Unauthorized: No token provided" });
     }
 
     try {
-      jwt.verify(token, SECRET_KEY, (error, user) => {
+      // Verify the token
+      jwt.verify(token, SECRET_KEY, (error, decoded) => {
         if (error) {
-          return response.status(400).json({ message: "unAuthorized" });
+          return res
+            .status(401)
+            .json({ message: "Unauthorized: Invalid token" });
         }
 
-        // set the user to request object
-        req.userId = user.id;
+        // Set the user ID from the token to the request object
+        req.userId = decoded.id;
 
-        //pass the middleware
+        // Proceed to the next middleware or route handler
         next();
       });
-    } catch (err) {
-      return res.status(401).json({ error: "Invalid token" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
     }
   },
 
