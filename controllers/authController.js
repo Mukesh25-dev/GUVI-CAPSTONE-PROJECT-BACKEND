@@ -79,8 +79,9 @@ const authController = {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
+        path: "/",
       });
 
       res.status(200).json({ message: "Login successful" });
