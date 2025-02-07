@@ -3,22 +3,25 @@ const { SECRET_KEY } = require("../utils/config");
 const jwt = require("jsonwebtoken");
 
 const auth = {
-  verifyLogin: async (req, res, next) => {
-    const token = req.cookies.token; // Access cookie from request
+  verifyLogin: async (request, response, next) => {
+    const token = request.cookies.token;
 
     if (!token) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return response.status(400).json({ message: "unAuthorized" });
     }
 
-    try {
-      const decoded = jwt.verify(token, SECRET_KEY); // Verify JWT
+    //verify the token
+    jwt.verify(token, SECRET_KEY, (error, user) => {
+      if (error) {
+        return response.status(400).json({ message: "unAuthorized" });
+      }
 
-      req.userID = decoded.id; // Attach user data to request
+      // set the user to request object
+      request.userId = user.id;
 
+      //pass the middleware
       next();
-    } catch (err) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
+    });
   },
 
   allowRoles: (roles) => {
