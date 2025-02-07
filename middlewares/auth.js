@@ -13,7 +13,7 @@ const auth = {
     try {
       const decoded = jwt.verify(token, SECRET_KEY); // Verify JWT
 
-      req.userID = decoded.id; // Attach user data to request
+      req.userID = decoded.userid; // Attach user data to request
 
       next();
     } catch (err) {
