@@ -17,7 +17,7 @@ const auth = {
         }
 
         // set the user to request object
-        request.userId = user.id;
+        req.userId = user.id;
 
         //pass the middleware
         next();
