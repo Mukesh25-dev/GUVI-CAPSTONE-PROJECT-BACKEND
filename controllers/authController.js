@@ -101,15 +101,13 @@ const authController = {
   },
   me: async (request, response) => {
     try {
-      const userId = req.userId;
+      const userId = request.userId;
 
-      const user = await User.findById(userId);
+      // find the user in the db by the id
+      const user = await User.findById(userId).select("-password -v");
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      res.json({ id: user._id, email: user.email });
+      //show the details of the user
+      response.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
