@@ -11,11 +11,17 @@ const auth = {
     }
 
     try {
-      const decoded = jwt.verify(token, SECRET_KEY); // Verify JWT
+      jwt.verify(token, SECRET_KEY, (error, user) => {
+        if (error) {
+          return response.status(400).json({ message: "unAuthorized" });
+        }
 
-      req.userID = decoded.userid; // Attach user data to request
+        // set the user to request object
+        request.userId = user.id;
 
-      next();
+        //pass the middleware
+        next();
+      });
     } catch (err) {
       return res.status(401).json({ error: "Invalid token" });
     }
